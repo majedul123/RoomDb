@@ -16,6 +16,11 @@
 
 package com.example.android.trackmysleepquality.database
 
+import android.content.Context
+import androidx.room.Database
+import androidx.room.Room
+import androidx.room.RoomDatabase
+
 // TODO (01) Create an abstract class that extends RoomDatabase.
 
 // TODO (02) Declare an abstract value of type SleepDatabaseDao.
@@ -29,3 +34,29 @@ package com.example.android.trackmysleepquality.database
 // TODO (06) Inside the synchronized block:
 // Check whether the database already exists,
 // and if it does not, use Room.databaseBuilder to create it.
+
+@Database(entities = [SleepNight::class], version = 1, exportSchema = false)
+abstract class SleepDatabase : RoomDatabase() {
+    abstract val sleepDatabaseDao: SleepDatabaseDao
+
+    companion object {
+        @Volatile
+        private var INSTANCE: SleepDatabase? = null
+        fun getInstance(context: Context): SleepDatabase {
+            var instance = INSTANCE
+            if (instance == null) {
+                instance = Room.databaseBuilder(
+                    context.applicationContext,
+                    SleepDatabase::class.java,
+                    "sleep_history_database"
+                )
+                    .fallbackToDestructiveMigration()
+                    .build()
+                INSTANCE = instance
+            }
+            return instance
+        }
+    }
+
+
+}

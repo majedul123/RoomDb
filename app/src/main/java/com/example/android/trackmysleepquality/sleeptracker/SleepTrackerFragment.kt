@@ -65,6 +65,7 @@ class SleepTrackerFragment : Fragment() {
             night?.let {
                 this.findNavController().navigate(
                    R.id.sleep_quality_fragment)
+
                 sleepTrackerViewModel.doneNavigation()
             }
 
